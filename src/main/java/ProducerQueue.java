@@ -16,18 +16,13 @@ import javax.jms.TextMessage;
 public class ProducerQueue implements Runnable
 {
 	public static final Logger logger = LogManager.getLogger("ProducerQueue");
+	ActiveMQUtils activeMQUtils = new ActiveMQUtils();
 
 	public void run()
 	{
 		try
 		{
-			logger.info("In Producer Queue");
-			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
-			Connection connection = connectionFactory.createConnection();
-			connection.start();
-			logger.info("connection Started");
-
-			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Session session = activeMQUtils.getSession();
 
 			Destination destination = session.createQueue("location-request-queue");
 
@@ -37,8 +32,8 @@ public class ProducerQueue implements Runnable
 
 			msgProducer.send(message);
 			logger.info("message sent");
-			session.close();
-			connection.close();
+
+			activeMQUtils.close();
 
 		}
 		catch (JMSException e)

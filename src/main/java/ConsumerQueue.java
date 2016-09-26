@@ -1,36 +1,27 @@
-import org.apache.activemq.ActiveMQConnectionFactory;
-import org.apache.activemq.transport.stomp.Stomp.Headers.Connect;
 import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
-import javax.jms.Connection;
 import javax.jms.Destination;
 import javax.jms.ExceptionListener;
 import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageConsumer;
 import javax.jms.Session;
-import org.apache.logging.log4j.*;
 
 /**
  * Created by lg on 23/9/16.
  */
-public class ConsumerQueue implements ExceptionListener, Runnable
+public class ConsumerQueue
+		implements ExceptionListener, Runnable
 {
 	public static final Logger logger = LogManager.getLogger("ConsumerQueue");
+	ActiveMQUtils activeMQUtils = new ActiveMQUtils();
 
 	public void run()
 	{
-
-
 		try
 		{
-			logger.info("In Producer Queue");
-			ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("vm://localhost");
-			Connection connection = connectionFactory.createConnection();
-			connection.start();
-			logger.info("connection Started");
-
-			Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+			Session session = activeMQUtils.getSession();
 
 			Destination destination = session.createQueue("location-request-queue");
 
@@ -41,8 +32,8 @@ public class ConsumerQueue implements ExceptionListener, Runnable
 			System.out.print("Message Received: " + receivedMsg);
 
 			msgConsumer.close();
-			session.close();
-			connection.close();
+
+			activeMQUtils.close();
 		}
 		catch (JMSException e)
 		{

@@ -25,4 +25,19 @@ public class ActiveMQUtils
 
 		return session;
 	}
+
+	public void close(){
+		try
+		{
+			session.close();
+			connection.close();
+		}
+		catch (JMSException e)
+		{
+			e.printStackTrace();
+		}
+
+	}
+
+
 }
