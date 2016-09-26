@@ -1,7 +1,7 @@
 /**
  * Created by lg on 23/9/16.
  */
-public class Test
+public class SomeTest
 {
 	public static void main(String[] args)
 	{
