@@ -1,16 +1,19 @@
 import org.apache.activemq.ActiveMQConnectionFactory;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Before;
 import org.junit.Test;
 
 import javax.jms.Connection;
 import javax.jms.ConnectionFactory;
 import javax.jms.JMSException;
+import javax.jms.Session;
 
 public class ActiveMQTest
 {
 	private static final Logger logger = LogManager.getLogger(ActiveMQTest.class);
-
+	private Connection connection;
+	private Session session;
 
 
 	@Test
@@ -34,6 +37,7 @@ public class ActiveMQTest
 	{
 		logger.info("Starting client .. ");
 
+
 		// Creating connection factory
 		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("failover:(tcp://0.0.0.0:61616)");
 
@@ -41,7 +45,7 @@ public class ActiveMQTest
 		final Connection connection = connectionFactory.createConnection();
 		connection.start();
 
-		int i = 100;
+		int i = 15;
 
 		while (i-- > 0)
 		try
@@ -57,4 +61,6 @@ public class ActiveMQTest
 		// Closing connection
 		connection.close();
 	}
+
+
 }
