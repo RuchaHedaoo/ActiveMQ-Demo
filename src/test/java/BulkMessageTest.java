@@ -52,18 +52,20 @@ public class BulkMessageTest
 			//Creating producer
 			MessageProducer producer = session.createProducer(destination);
 
+			long startTime = System.currentTimeMillis();
 			//Sending Text Message to queue
-
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 10000; i++)
 			{
 				count++;
 				String txtMsg = UUID.randomUUID().toString();
 				TextMessage sentmessage = session.createTextMessage(txtMsg);
 				sentmessage.setIntProperty("count", i);
 				producer.send(destination, sentmessage);
-				logger.info(" "+txtMsg);
+				logger.info("Sent "+count);
 			}
+			long timeDifference = System.currentTimeMillis()- startTime;
 			logger.info("Number of sent messages: "+count );
+			logger.info("Time to send the messages "+ timeDifference);
 
 
 			//Closing connection
@@ -93,8 +95,9 @@ public class BulkMessageTest
 			MessageConsumer consumer = session.createConsumer(destination);
 
 			//Receiving Text Message from queue
+			long startTime = System.currentTimeMillis();
 
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 10000; i++)
 			{
 
 				Message receivedMsg = consumer.receive(2000);
@@ -104,7 +107,7 @@ public class BulkMessageTest
 				{
 					TextMessage textMessage = (TextMessage) receivedMsg;
 					String text = textMessage.getText();
-					logger.info("Received: " + text);
+					logger.info("Received: " + count);
 
 				}
 				else
@@ -112,8 +115,11 @@ public class BulkMessageTest
 					logger.info("Received: " + receivedMsg);
 				}
 			}
+			long timeDifference = System.currentTimeMillis()- startTime;
 			logger.info("Number of received messages: "+count );
-			Assert.assertEquals(5,count);
+			logger.info("Time to receive the messages "+ timeDifference);
+
+			Assert.assertEquals(10000,count);
 
 			//Closing connection
 			consumer.close();

@@ -29,7 +29,10 @@ public class ObjectMessages
 		logger.info("Starting client .. ");
 
 		// Creating connection factory
-		ConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://0.0.0.0:61616");
+		ActiveMQConnectionFactory connectionFactory = new ActiveMQConnectionFactory("tcp://0.0.0.0:61616");
+
+		connectionFactory.setTrustAllPackages(true);
+
 
 		// Creating and starting connection
 		connection = connectionFactory.createConnection();
